@@ -1,8 +1,14 @@
 import React from 'react';
+import Header from './Header';
+import TaskView from './TaskView';
 
 const App = () => {
   return(
-    <div>todoリスト</div>
+    <>
+      <Header />
+      <TaskView />
+      
+    </>
   )
 }
 export default App;
