@@ -6,12 +6,15 @@ import {
   BrowserRouter as Router,
   useHistory
 } from 'react-router-dom';
+import { changeFlg, removeTask } from '../actions/action';
 const tasksSelector = state => state.task.tasks
 
 const TaskView = () => {
   const tasks = useSelector(tasksSelector)
+  const dispatch = useDispatch()
   const history = useHistory();
   const handleLink = path => history.push(path)
+  console.log(tasks)
 
   return(
     <>
@@ -21,20 +24,17 @@ const TaskView = () => {
           <Button variant="contained" color="primary" disableElevation onClick={() => handleLink('/new_task')}>
             新規タスク作成
           </Button>
-          {/* <Switch>
-            <Route path='/new_task' component={NewTask} />
-          </Switch> */}
           <div>
               {tasks.map((task, index) => {
                 return (
-                  <ListItem dense button key={index}>
-                    <ListItemIcon>
-                      <Checkbox edge="start" disableRipple />
+                  <ListItem dense button key={index} >
+                    <ListItemIcon onClick={() => dispatch(changeFlg(task,index))}>
+                      <Checkbox edge="start" disableRipple checked={task.flg}/>
                     </ListItemIcon>
-                    <ListItemText primary={`${index+1}.${task.title}`} />
-                    <ListItemText primary={task.person} />
+                    <ListItemText primary={`${index+1}.${task.title}`} onClick={() => handleLink(`/details_task/${task.id}`)}/>
+                    <ListItemText primary={task.person} onClick={() => handleLink(`/details_task/${task.id}`)}/>
                     <ListItemSecondaryAction>
-                      <IconButton edge="end" aria-label="commnets">
+                      <IconButton edge="end" aria-label="commnets" onClick={() => dispatch(removeTask(index))}>
                         <DeleteIcon />
                       </IconButton>
                     </ListItemSecondaryAction>

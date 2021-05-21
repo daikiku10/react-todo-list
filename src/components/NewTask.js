@@ -36,6 +36,7 @@ const NewTask = () => {
   }
   const dataTask = () => {
     let data = {
+      id: new Date().getTime(),
       title:task,
       taskDes:taskDes,
       person:person,
@@ -72,6 +73,7 @@ const NewTask = () => {
           </div>
           <Router>
             <button onClick={dataTask}>タスク作成</button>
+            <button onClick={() => handleLink('/')}>一覧へ戻る</button>
           </Router>
         </div>
       </Container>
