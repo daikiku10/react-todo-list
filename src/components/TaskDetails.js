@@ -59,6 +59,7 @@ const TaskDetails = () => {
           期日：{task.deadLine}
         </Typography>
         <Router>
+          <button onClick={() => handleLink(`/edit_task/${taskId}`)}>編集</button>
           <button onClick={() => handleLink('/')}>一覧へ戻る</button>
         </Router>
       </Container>

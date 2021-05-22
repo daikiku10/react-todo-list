@@ -1,22 +1,31 @@
 import React, { useState } from 'react'
-import { useDispatch } from 'react-redux'
-import { addTask } from '../actions/action'
+import { editTask } from '../actions/action'
+import { useDispatch, useSelector } from 'react-redux'
+import { useParams } from 'react-router-dom'
 import { Container, TextField } from '@material-ui/core'
 import {
   BrowserRouter as Router,
   useHistory
 } from 'react-router-dom';
 
+const tasksSelector = state => state.task.tasks
 
-const NewTask = () => {
-  const [task,setTask] = useState('')
-  const [taskDes, setTaskDes] = useState('')
-  const [person, setPerson] = useState('')
-  const [deadLine, setDeadLine] = useState('')
-  const [startLine, setStartLine] = useState('')
-  const dispatch = useDispatch();
+const TaskEdit = () => {
   const history = useHistory();
   const handleLink = path => history.push(path)
+  const {taskId} = useParams()
+  const taskIdNum = Number(taskId);
+  const tasks = useSelector(tasksSelector)
+  const taskNum = tasks.findIndex(task => task.id === taskIdNum)
+  const todo = tasks[taskNum]
+  
+  const [task,setTask] = useState(todo.title)
+  const [taskDes, setTaskDes] = useState(todo.taskDes)
+  const [person, setPerson] = useState(todo.person)
+  const [deadLine, setDeadLine] = useState(todo.deadLine)
+  const [startLine, setStartLine] = useState(todo.startLine)
+  const dispatch = useDispatch();
+
 
   const createTask = e => {
     setTask(e.target.value)
@@ -33,9 +42,10 @@ const NewTask = () => {
   const createStartLine = e => {
     setStartLine(e.target.value)    
   }
+
   const dataTask = () => {
     let data = {
-      id: new Date().getTime(),
+      id: todo.id,
       title:task,
       taskDes:taskDes,
       person:person,
@@ -43,14 +53,15 @@ const NewTask = () => {
       startLine:startLine,
       flg:false
     }
-    dispatch(addTask(data))
+    dispatch(editTask(data))
     handleLink('/')
   }
+
+
   return(
     <>
       <Container maxWidth="sm">
-        <h1>新規タスク作成</h1>
-        <div>
+        <h1>編集</h1>
           <div>
             <TextField label="タスク" autoComplete="current-password" variant="outlined" value={task} onChange={createTask}></TextField>
           </div>
@@ -70,14 +81,14 @@ const NewTask = () => {
             <label>開始日</label>
             <input type="date" value={startLine} onChange={createStartLine} />
           </div>
-          <Router>
-            <button onClick={dataTask}>タスク作成</button>
-            <button onClick={() => handleLink('/')}>一覧へ戻る</button>
-          </Router>
-        </div>
+        <Router>
+          <button onClick={dataTask}>保存</button>
+          <button onClick={() => handleLink('/')}>一覧へ戻る</button>
+        </Router>
+
       </Container>
     </>
   )
 }
 
-export default NewTask
+export default TaskEdit

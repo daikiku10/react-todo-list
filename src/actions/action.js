@@ -4,6 +4,12 @@ export const addTask = (data) => ({
   data:data
 })
 
+export const EDITTASK = 'editTask'
+export const editTask = (data) => ({
+  type:EDITTASK,
+  data:data
+})
+
 export const REMOVETASK = 'removeTask'
 export const removeTask = (index) => ({
   type:REMOVETASK,
